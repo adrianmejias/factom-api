@@ -21,9 +21,27 @@ You can install this package via composer using:
 composer require adrianmejias/factom-api
 ```
 
-You must also install this service provider.
+You must also install this service provider in `conifg/app.php`.
 
-The package will automatically register itself.
+```php
+'providers' => [
+  ...
+  
+  AdrianMejias\FactomApi\FactomApiServiceProvider::class,
+  
+  ...
+```
+
+The package will automatically register itself. If not, then add the alias in `config/app.php`.
+
+```php
+'aliases' => [
+  ...
+  
+  'FactomApi' => AdrianMejias\FactomApi\Facades\FactomApi::class,
+  
+  ...
+```
 
 To publish the config file to `app/config/factom-api.php`
 
