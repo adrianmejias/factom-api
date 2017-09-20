@@ -143,7 +143,6 @@ class FactomConnector
      * @param string $actionName
      * @param array $binaryDataParams
      * @param array $curlOptions
-     * @param bool $asObj
      *
      * @return object|string
      *
