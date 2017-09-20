@@ -1,0 +1,61 @@
+{
+    "name": "adrianmejias/factom-api",
+    "description": "A simple Laravel service provider for the Factom API.",
+    "type": "library",
+    "homepage": "https://github.com/adrianmejias/factom-api",
+    "license": "MIT",
+    "keywords": [
+        "factom",
+        "factomd",
+        "factom-walletd",
+        "factom-debug",
+        "PHP",
+        "API",
+        "Laravel"
+    ],
+    "support": {
+        "issues": "https://github.com/adrianmejias/factom-api/issues",
+        "source": "https://github.com/adrianmejias/factom-api"
+    },
+    "authors": [{
+        "name": "Adrian",
+        "email": "adrianmejias@gmail.com",
+        "homepage": "https://adrianmejias.com",
+        "role": "Developer"
+    }],
+    "require": {
+        "php" : "~7.0",
+        "illuminate/support": "~5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "^6.3",
+        "mockery/mockery": "^0.9.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdrianMejias\\FactomApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AdrianMejias\\FactomApi\\Test\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AdrianMejias\\FactomApi\\FactomApiServiceProvider"
+            ],
+            "aliases": {
+                "FactomApi": "AdrianMejias\\FactomApi\\Facades\\FactomApi",
+                "FactomWalletApi": "AdrianMejias\\FactomApi\\Facades\\FactomWalletApi",
+                "FactomDebugApi": "AdrianMejias\\FactomApi\\Facades\\FactomDebugApi"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
