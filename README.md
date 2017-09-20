@@ -4,7 +4,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/adrianmejias/factom-api/master.svg?style=flat-square)](https://travis-ci.org/adrianmejias/factom-api)
 [![Quality Score](https://img.shields.io/scrutinizer/g/adrianmejias/factom-api.svg?style=flat-square)](https://scrutinizer-ci.com/g/adrianmejias/factom-api)
-[![StyleCI](https://styleci.io/repos/35035915/shield?branch=master)](https://styleci.io/repos/35035915)
+[![StyleCI](https://styleci.io/repos/104237610/shield?branch=master)](https://styleci.io/repos/104237610)
 [![Total Downloads](https://img.shields.io/packagist/dt/adrianmejias/factom-api.svg?style=flat-square)](https://packagist.org/packages/adrianmejias/factom-api)
 
 This package provides a simple service provider for the Factom API for use with the Laravel Framework.
