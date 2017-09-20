@@ -1,7 +1,7 @@
 <?php
 
 return [
-  
+
   'url' => env('FACTOM_URL', 'http://localhost:8088/v2'),
 
   'ssl' => [
@@ -10,9 +10,9 @@ return [
   ],
 
   'username' => env('FACTOM_USERNAME'),
-  
+
   'password' => env('FACTOM_PASSWORD'),
-  
+
   'wallet' => [
     'url' => env('FACTOM_WALLET_URL', 'http://localhost:8089/v2'),
 
@@ -22,10 +22,10 @@ return [
     ],
 
     'username' => env('FACTOM_WALLET_USERNAME'),
-    
+
     'password' => env('FACTOM_WALLET_PASSWORD'),
   ],
-  
+
   'debug' => [
     'url' => env('FACTOM_DEBUG_URL', 'http://localhost:8088/debug'),
 
@@ -35,7 +35,7 @@ return [
     ],
 
     'username' => env('FACTOM_DEBUG_USERNAME'),
-    
+
     'password' => env('FACTOM_DEBUG_PASSWORD'),
   ],
 
