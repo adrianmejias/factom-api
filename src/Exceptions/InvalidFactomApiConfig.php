@@ -6,7 +6,6 @@ use Exception;
 
 class InvalidFactomApiConfig extends Exception
 {
-
     /**
      * @return static
      */
@@ -14,5 +13,4 @@ class InvalidFactomApiConfig extends Exception
     {
         return new static('The Factom API requires a url to connect to');
     }
-
 }

@@ -63,5 +63,4 @@ class FactomApiTest extends TestCase
 
         $this->newsletter->subscribe($email);
     }
-    
 }

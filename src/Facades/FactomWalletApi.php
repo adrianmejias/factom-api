@@ -4,7 +4,7 @@ namespace AdrianMejias\FactomApi\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class FactomWalletApiFacade extends Facade
+class FactomWalletApi extends Facade
 {
     public static function getFacadeAccessor()
     {
