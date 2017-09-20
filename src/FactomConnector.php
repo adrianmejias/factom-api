@@ -67,21 +67,21 @@ class FactomConnector
         $this->password = $password;
 
         if (! function_exists('curl_init')) {
-            abort(503, 'The Factom API integration requires the cURL extension, please see http://curl.haxx.se/docs/install.html to install it');
+            throw InvalidFactomApiConfig::noCurlFound();
         } elseif (empty($this->url)) {
             throw InvalidFactomApiConfig::noUrlDefined();
         } elseif (empty($this->certificate) && $this->ssl) {
-            abort(503, 'When enabling SSL configuration, you must ensure to define a certificate');
+            throw InvalidFactomApiConfig::noCertificateDefined();
         } elseif (! empty($this->certificate) && $this->ssl) {
             if (preg_match('/^(https:\/\/)/i', $this->url)) {
-                abort(503, 'When defining a certificate, you must ensure the host is using HTTPS');
+                throw InvalidFactomApiConfig::noSecureUrlDefined();
             } elseif (! file_exists($this->certificate)) {
-                abort(503, 'Can\'t find provided certificate file');
+                throw InvalidFactomApiConfig::noCertificateExists();
             }
         } elseif (! empty($this->username) && empty($this->password)) {
-            abort(503, 'You must provide a password with a username.');
+            throw InvalidFactomApiConfig::noUsernameDefined();
         } elseif (empty($this->username) && ! empty($this->password)) {
-            abort(503, 'You must provide a username with a password.');
+            throw InvalidFactomApiConfig::noPasswordDefined();
         }
 
         if (! $this->ssl) {
@@ -102,7 +102,7 @@ class FactomConnector
     private function gatherCurlOptions(string $actionName, string $method, array $binaryDataParams = [], array $customOptions = [])
     {
         if (! in_array(strtoupper($method), ['GET', 'POST'])) {
-            abort(503, 'Supplied method must match GET or POST');
+            throw InvalidFactomApiConfig::invalidMethodCalled();
         }
 
         $options = [
@@ -164,9 +164,9 @@ class FactomConnector
         }
 
         if ($error) {
-            abort(503, 'Received error "'.$error.'" when hitting "'.$actionName.'" within the Factom API');
+            throw InvalidFactomApiConfig::invalidApiResponse($error, $actionName);
         } elseif (! $result) {
-            abort(503, 'Received an empty response when hitting "'.$actionName.'" within the Factom API');
+            throw InvalidFactomApiConfig::emptyApiResponse($actionName);
         }
 
         $response = json_decode($result);
@@ -180,20 +180,5 @@ class FactomConnector
         }
 
         // return Result
-    }
-
-    /**
-     * Returns various heights that allows you to view the state of the blockchain.
-     *
-     * @url https://docs.factom.com/api#heights
-     *
-     * @return json { ... }
-     */
-    public function heights()
-    {
-        $result = $this->callEndpoint('heights', 'POST');
-
-        // return Result
-        return $result;
     }
 }
