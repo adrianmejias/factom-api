@@ -38,6 +38,9 @@ This will publish a file `factom-api.php` in your config directory with teh foll
 
 return [
   
+  /**
+   * Base credentials for Factom server.
+   */
   'url' => env('FACTOM_URL', 'http://localhost:8088/v2'),
 
   'ssl' => [
@@ -46,9 +49,12 @@ return [
   ],
 
   'username' => env('FACTOM_USERNAME'),
-  
+
   'password' => env('FACTOM_PASSWORD'),
-  
+
+  /**
+   * Factom wallet server credentials.
+   */
   'wallet' => [
     'url' => env('FACTOM_WALLET_URL', 'http://localhost:8089/v2'),
 
@@ -58,10 +64,13 @@ return [
     ],
 
     'username' => env('FACTOM_WALLET_USERNAME'),
-    
+
     'password' => env('FACTOM_WALLET_PASSWORD'),
   ],
-  
+
+  /**
+   * Factom debug server credentials.
+   */
   'debug' => [
     'url' => env('FACTOM_DEBUG_URL', 'http://localhost:8088/debug'),
 
@@ -71,7 +80,7 @@ return [
     ],
 
     'username' => env('FACTOM_DEBUG_USERNAME'),
-    
+
     'password' => env('FACTOM_DEBUG_PASSWORD'),
   ],
 

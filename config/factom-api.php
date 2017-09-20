@@ -1,7 +1,10 @@
 <?php
 
 return [
-
+  
+  /**
+   * Base credentials for Factom server.
+   */
   'url' => env('FACTOM_URL', 'http://localhost:8088/v2'),
 
   'ssl' => [
@@ -13,6 +16,9 @@ return [
 
   'password' => env('FACTOM_PASSWORD'),
 
+  /**
+   * Factom wallet server credentials.
+   */
   'wallet' => [
     'url' => env('FACTOM_WALLET_URL', 'http://localhost:8089/v2'),
 
@@ -26,6 +32,9 @@ return [
     'password' => env('FACTOM_WALLET_PASSWORD'),
   ],
 
+  /**
+   * Factom debug server credentials.
+   */
   'debug' => [
     'url' => env('FACTOM_DEBUG_URL', 'http://localhost:8088/debug'),
 
