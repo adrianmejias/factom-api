@@ -117,6 +117,12 @@ Route::get('/factom/heights', function() {
 });
 ```
 
+## Todo
+
+* Replace Curl with Guzzle
+* Add Wallet methods
+* Add unit tests
+
 ## Testing
 
 Run the tests with:
