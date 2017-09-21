@@ -45,7 +45,7 @@ class InvalidFactomApiConfig extends Exception
     {
         return new static('Can\'t find provided certificate file');
     }
-    
+
     /**
      * @return static
      */
@@ -53,7 +53,7 @@ class InvalidFactomApiConfig extends Exception
     {
         return new static('You must provide a password with a username');
     }
-    
+
     /**
      * @return static
      */
@@ -61,7 +61,7 @@ class InvalidFactomApiConfig extends Exception
     {
         return new static('You must provide a username with a password');
     }
-    
+
     /**
      * @return static
      */
@@ -69,7 +69,7 @@ class InvalidFactomApiConfig extends Exception
     {
         return new static('Supplied method must match GET or POST');
     }
-    
+
     /**
      * @return static
      */
@@ -77,7 +77,7 @@ class InvalidFactomApiConfig extends Exception
     {
         return new static('Received error "'.$error.'" when hitting "'.$actionName.'" within the Factom API');
     }
-    
+
     /**
      * @return static
      */
