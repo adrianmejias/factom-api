@@ -8,6 +8,6 @@ class FactomDebugApi extends Facade
 {
     public static function getFacadeAccessor()
     {
-        return 'factomDebugApi';
+        return 'FactomDebugApi';
     }
 }

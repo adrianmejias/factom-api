@@ -2,6 +2,8 @@
 
 namespace AdrianMejias\FactomApi;
 
+use AdrianMejias\FactomApi\Exceptions\InvalidFactomApiConfig;
+
 class FactomConnector
 {
     /**

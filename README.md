@@ -39,6 +39,8 @@ The package will automatically register itself. If not, then add the alias in `c
   ...
   
   'FactomApi' => AdrianMejias\FactomApi\Facades\FactomApi::class,
+  'FactomWalletApi' => AdrianMejias\FactomApi\Facades\FactomWalletApi::class,
+  'FactomDebugApi' => AdrianMejias\FactomApi\Facades\FactomDebugApi::class,
   
   ...
 ```

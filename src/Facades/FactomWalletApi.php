@@ -8,6 +8,6 @@ class FactomWalletApi extends Facade
 {
     public static function getFacadeAccessor()
     {
-        return 'factomWalletApi';
+        return 'FactomWalletApi';
     }
 }
