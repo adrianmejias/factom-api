@@ -4,8 +4,6 @@ namespace AdrianMejias\FactomApi;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request;
-
 use AdrianMejias\FactomApi\Exceptions\InvalidFactomApiConfig;
 
 class FactomConnector
@@ -16,11 +14,11 @@ class FactomConnector
      * @var string
      */
     const JSON_RPC = '2.0';
-    
+
     /**
      * The "ID" param provided in all requests to the API.
      *
-     * @var integer
+     * @var int
      */
     const REQUEST_ID = 0;
 
@@ -30,14 +28,14 @@ class FactomConnector
      * @var string
      */
     const HEADER_CONTENT_TYPE = 'text/plain';
-    
+
     /**
      * The header accept in all requests to the API.
      *
      * @var string
      */
     const HEADER_ACCEPT = 'application/json';
-    
+
     /**
      * The generic error if cannot load server properly.
      *
@@ -161,13 +159,13 @@ class FactomConnector
 
         // Append certificate verification
         // if ($this->ssl) {
-            // $options['verify'] = $this->certificate;
-            // $options['cert'] = [
-            //     'cert' => [
-            //         $this->certificate,
-            //         $this->password
-            //     ],
-            // ];
+        // $options['verify'] = $this->certificate;
+        // $options['cert'] = [
+        //     'cert' => [
+        //         $this->certificate,
+        //         $this->password
+        //     ],
+        // ];
         // }
 
         // Append authentication to params
@@ -184,11 +182,11 @@ class FactomConnector
         // Make the call to factom server
         try {
             $response = $this->client->{strtolower($method)}($this->url, $options);
-        } catch(RequestException $e) {
+        } catch (RequestException $e) {
             $error = $e->getMessage();
         }
 
-        if (!empty($error)) {
+        if (! empty($error)) {
             throw InvalidFactomApiConfig::invalidApiResponse($error, $action);
         }
 
