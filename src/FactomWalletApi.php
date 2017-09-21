@@ -197,7 +197,7 @@ class FactomWalletApi extends FactomConnector
      * they didn’t stop to think if they should.
      *
      * @url https://docs.factom.com/api#all-transactions
-     * 
+     *
      * @warning The amount of data returned by this is so large.
      *
      * @return json { array transactions }
