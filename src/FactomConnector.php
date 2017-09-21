@@ -2,47 +2,76 @@
 
 namespace AdrianMejias\FactomApi;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
+
 use AdrianMejias\FactomApi\Exceptions\InvalidFactomApiConfig;
 
 class FactomConnector
 {
     /**
      * The JSON RPC spec that the API uses.
+     *
+     * @var string
      */
     const JSON_RPC = '2.0';
+    
     /**
      * The "ID" param provided in all requests to the API.
+     *
+     * @var integer
      */
     const REQUEST_ID = 0;
+
     /**
      * The header content type in all requests to the API.
+     *
+     * @var string
      */
     const HEADER_CONTENT_TYPE = 'text/plain';
+    
+    /**
+     * The header accept in all requests to the API.
+     *
+     * @var string
+     */
+    const HEADER_ACCEPT = 'application/json';
+    
     /**
      * The generic error if cannot load server properly.
+     *
+     * @var string
      */
     const BLANK_PAGE_ERROR = 'Page not found';
+
+    /**
+     * The client instance.
+     *
+     * @var null|GuzzleHttp\Client
+     */
+    protected $client = null;
 
     /**
      * The URL for all API requests.
      *
      * @var null|string
      */
-    protected $url;
+    protected $url = 'http://localhost:8088/v2';
 
     /**
      * Make secure URL requests.
      *
      * @var null|bool
      */
-    protected $ssl;
+    protected $ssl = false;
 
     /**
      * Path to the certificate file for using factomd over TLS.
      *
      * @var null
      */
-    protected $certifcate;
+    protected $certifcate = null;
 
     /**
      * The provided username for interacting with factomd
@@ -50,7 +79,7 @@ class FactomConnector
      *
      * @var null
      */
-    protected $username;
+    protected $username = null;
 
     /**
      * The provided password for interacting with factomd
@@ -58,7 +87,7 @@ class FactomConnector
      *
      * @var null
      */
-    protected $password;
+    protected $password = null;
 
     public function __construct(string $url, bool $ssl = false, string $certificate = null, string $username = null, string $password = null)
     {
@@ -89,98 +118,102 @@ class FactomConnector
         if (! $this->ssl) {
             $this->certificate = null;
         }
-    }
 
-    /**
-     * Initialize the cURL request with all requested params.
-     *
-     * @param string $actionName
-     * @param string $method
-     * @param array $binaryDataParams
-     * @param array $customOptions
-     * @return array
-     * @throws Exception - ensures we are passing in viable methods
-     */
-    private function gatherCurlOptions(string $actionName, string $method, array $binaryDataParams = [], array $customOptions = [])
-    {
-        if (! in_array(strtoupper($method), ['GET', 'POST'])) {
-            throw InvalidFactomApiConfig::invalidMethodCalled();
-        }
-
-        $options = [
-          CURLOPT_HTTPHEADER => [
-            'Content-Type: '.self::HEADER_CONTENT_TYPE,
-          ],
-          CURLOPT_HEADER => false,
-          CURLOPT_POSTFIELDS => json_encode([
-            'jsonrpc' => self::JSON_RPC,
-            'id' => self::REQUEST_ID,
-            'method' => $actionName,
-            'params' => $binaryDataParams,
-          ]),
-          CURLOPT_SSL_VERIFYHOST => 0,
-          CURLOPT_SSL_VERIFYPEER => 0,
-          // CURLOPT_URL => $this->url,
-          CURLOPT_POST => strtoupper($method) == 'POST' ? 1 : 0,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_TIMEOUT => 10,
-          /*
-           * Auth related cURL params
-           */
-          CURLOPT_USERPWD => ! empty($this->username) && ! empty($this->password) ? $this->username.':'.$this->password : false,
-          CURLOPT_HTTPAUTH => ! empty($this->username) && ! empty($this->password) ? CURLAUTH_ANY : false,
-          /*
-           * Cert / SSL related cURL params
-           */
-          CURLOPT_SSL_VERIFYPEER => false,
-      ] + $customOptions;
-
-        // return Result
-        return $options;
+        $this->client = new Client([
+            'base_uri' => rtrim($this->url, '/').'/',
+            'timeout' => 10,
+            'http_errors' => false,
+            'debug' => false,
+        ]);
     }
 
     /**
      * Call the requested endpoint.
      *
      * @param string $actionName
-     * @param array $binaryDataParams
-     * @param array $curlOptions
+     * @param array $params
+     * @param array $extraOptions
      *
      * @return object|string
      *
-     * @throws Exception When a cURL error occurs
+     * @throws Exception When a Guzzle error occurs
      */
-    public function callEndpoint(string $actionName, string $method, array $binaryDataParams = [], array $curlOptions = [])
+    public function callEndpoint(string $action, string $method, array $params = [], array $extraOptions = [])
     {
-        $curlOptions = $this->gatherCurlOptions($actionName, $method, $binaryDataParams, $curlOptions);
-
-        $ch = curl_init($this->url);
-        curl_setopt_array($ch, $curlOptions);
-        $result = curl_exec($ch);
-        $error = curl_error($ch);
-        $info = curl_getinfo($ch);
-        curl_close($ch);
-
-        if (! $error && strtoupper($result) == strtoupper(self::BLANK_PAGE_ERROR)) {
-            $error = self::BLANK_PAGE_ERROR;
+        // Check our method...
+        if (! in_array(strtoupper($method), ['GET', 'POST'])) {
+            throw InvalidFactomApiConfig::invalidMethodCalled();
         }
 
-        if ($error) {
-            throw InvalidFactomApiConfig::invalidApiResponse($error, $actionName);
-        } elseif (! $result) {
-            throw InvalidFactomApiConfig::emptyApiResponse($actionName);
+        $options = [
+            'headers' => [
+                'Content-Type' => self::HEADER_CONTENT_TYPE,
+                'Accept' => self::HEADER_ACCEPT,
+            ],
+            // 'verify' => false,
+            'json' => [
+                'jsonrpc' => self::JSON_RPC,
+                'id' => self::REQUEST_ID,
+                'method' => strtolower($action),
+                'params' => $params,
+            ],
+        ] + $extraOptions;
+
+        // Append certificate verification
+        // if ($this->ssl) {
+            // $options['verify'] = $this->certificate;
+            // $options['cert'] = [
+            //     'cert' => [
+            //         $this->certificate,
+            //         $this->password
+            //     ],
+            // ];
+        // }
+
+        // Append authentication to params
+        if (! empty($this->username) && ! empty($this->password)) {
+            $options['auth'] = [
+                'username' => $this->username,
+                'password' => $this->password,
+            ];
         }
 
-        $response = json_decode($result);
+        $response = null;
+        $error = null;
 
-        if (is_object($response) && ! empty($response->result)) {
-            return $response->result;
+        // Make the call to factom server
+        try {
+            $response = $this->client->{strtolower($method)}($this->url, $options);
+        } catch(RequestException $e) {
+            $error = $e->getMessage();
         }
 
-        if (is_object($response) && ! empty($response->error)) {
-            return $response->error;
+        if (!empty($error)) {
+            throw InvalidFactomApiConfig::invalidApiResponse($error, $action);
         }
 
-        // return Result
+        $status_code = $response->getStatusCode();
+        $reason_phrase = $response->getReasonPhrase();
+        $body = (string) $response->getBody()->getContents();
+
+        // Check for empty body
+        if (empty($body)) {
+            throw InvalidFactomApiConfig::emptyApiResponse($action);
+        } elseif ($status_code != 200) {
+            throw InvalidFactomApiConfig::invalidApiResponse($reason_phrase, $action);
+        }
+
+        // return Json
+        if ($json_body = json_decode($body)) {
+            // Check for empty result
+            if (empty($json_body->result)) {
+                throw InvalidFactomApiConfig::emptyApiResponse($action);
+            }
+
+            return $json_body->result;
+        }
+
+        // return Response
+        return $body;
     }
 }

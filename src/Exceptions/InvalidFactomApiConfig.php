@@ -73,16 +73,16 @@ class InvalidFactomApiConfig extends Exception
     /**
      * @return static
      */
-    public static function invalidApiResponse(string $error, string $actionName)
+    public static function invalidApiResponse(string $error, string $action)
     {
-        return new static('Received error "'.$error.'" when hitting "'.$actionName.'" within the Factom API');
+        return new static('Received error "'.$error.'" when hitting "'.$action.'" within the Factom API');
     }
 
     /**
      * @return static
      */
-    public static function emptyApiResponse(string $actionName)
+    public static function emptyApiResponse(string $action)
     {
-        return new static('Received an empty response when hitting "'.$actionName.'" within the Factom API');
+        return new static('Received an empty response when hitting "'.$action.'" within the Factom API');
     }
 }

@@ -9,7 +9,7 @@
 
 This package provides a simple service provider for the Factom API for use with the Laravel Framework.
 
-Factom API documentation: https://docs.factom.com/api
+**Factom API documentation:** https://docs.factom.com/api
 
 `Note: This package is under development and should not be used for production environments.`
 
@@ -121,8 +121,9 @@ Route::get('/factom/heights', function() {
 
 ## Todo
 
-* Replace Curl with Guzzle
-* Add Wallet methods
+* ~~Replace Curl with Guzzle~~
+* ~~Add Wallet methods~~
+* Add certificate auth
 * Add unit tests
 
 ## Testing
